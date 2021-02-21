@@ -1,6 +1,6 @@
 'use strict';
 
-var productImages = [
+const productImages = [
   'bag.jpg',
   'banana.jpg',
   'bathroom.jpg',
@@ -24,16 +24,16 @@ var productImages = [
 ];
 
 
-var leftProductImg = document.querySelector('#left_product_img');
-var centerProductImg = document.querySelector('#center_product_img');
-var rightProductImg = document.querySelector('#right_product_img');
-var groupProductImages = document.getElementById('all_products');
-var products = [];//an array to store all products object
-var totalClicks = 0;
+const leftProductImg = document.querySelector('#left_product_img');
+const centerProductImg = document.querySelector('#center_product_img');
+const rightProductImg = document.querySelector('#right_product_img');
+const groupProductImages = document.getElementById('all_products');
+let products = [];//an array to store all products object
+let totalClicks = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 
-//constructor function to generate dynamic product objects
+//constructor function
 function Product(name){
   this.name = name.split('.')[0];
   this.urlImage = `images/${name}`;
@@ -44,7 +44,10 @@ function Product(name){
 
 //////////////////////////////////////////////////////////////////////////////
 
-var leftImageRandom , centerImageRandom , rightImageRandom ;
+let leftImageRandom ;
+let centerImageRandom ;
+let rightImageRandom ;
+
 function pickRandomImages(){
   leftImageRandom = products[randomNumber(0 , products.length-1 )];
   centerImageRandom = products[randomNumber(0 , products.length-1 )];
@@ -60,10 +63,6 @@ function pickRandomImages(){
 
 
   while(leftImageRandom===centerImageRandom || rightImageRandom === centerImageRandom || leftImageRandom === rightImageRandom){
-    //   while(((leftImageRandom||centerImageRandom)=== rightImageRandom) ||
-    //   (( centerImageRandom || rightImageRandom )===leftImageRandom) ||
-    //   (( leftImageRandom ||rightImageRandom )===centerImageRandom)){
-
     leftImageRandom = products[randomNumber(0 , products.length-1 )];
     centerImageRandom = products[randomNumber(0 , products.length-1 )];
     rightImageRandom = products[randomNumber(0 , products.length-1 )];
@@ -80,28 +79,27 @@ function pickRandomImages(){
 
 /////////////////////////////////////////////////////////////////////////
 
-for(var i = 0; i< productImages.length ; i++){
+for(let i = 0; i< productImages.length ; i++){
 // console.log(productImages[i]);
-  new Product(productImages[i]);//we pass the name of the product from the array
+  new Product(productImages[i]);
 }
 pickRandomImages();
 
-// Variables to store the product already on the page
-// the allImages array is a property of the ProductPicture constructor
+
 
 //////////////////////////////////////////////////////////////////////////
 
 groupProductImages.addEventListener('click' , clickImage);
 
-function clickImage(e){
+function clickImage(event){
 
   if(totalClicks < 25 ){
 
-    if( e.target.id === 'left_product_img'){
+    if( event.target.id === 'left_product_img'){
       leftImageRandom.clicksNumber++;
-    } if (e.target.id === 'center_product_img' ){
+    } if (event.target.id === 'center_product_img' ){
       centerImageRandom.clicksNumber++;
-    } if (e.target.id === 'right_product_img'){
+    } if (event.target.id === 'right_product_img'){
       rightImageRandom.clicksNumber++;
     }
     totalClicks++;
@@ -121,9 +119,9 @@ function clickImage(e){
 /////////////////////////////////////////////////////////////////////////
 
 function render() {
-  var ulE1 = document.getElementById('theEnd');
-  for (var i =0; i<products.length ; i++) {
-    var liE1 = document.createElement('li');
+  const ulE1 = document.getElementById('theEnd');
+  for (let i =0; i<products.length ; i++) {
+    const liE1 = document.createElement('li');
     liE1.textContent = `${products[i].name} had ${products[i].clicksNumber} votes and was shown ${products[i].viewsNumber} times`;
     ulE1.appendChild(liE1);
   }
