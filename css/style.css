@@ -16,47 +16,82 @@
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 15px;
-    text-align:left;
+    text-align:center;
     width: 100%;
      }
+
+ .myNav{
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  display: inline;
+  
+}
+
+a {
+  text-decoration: none;
+  font-size: larger;
+  text-transform: uppercase;
+  color: whitesmoke;
+ 
+  
+
+ }
+    
      
  p { 
      clear: both;
     margin-top: 3%;
-    margin-bottom: 5%;
+    margin-bottom: 3%;
     font-size: 150%;
     font-family: 'caveat';
     text-align: center;
     color:whitesmoke;
     }
     
-    img {
+img {
         float: right;
         width: 200px;
         height: 200px;
         margin-right: 2%;
         margin-top: 5%;
         margin-left: 2%;
-       
-           
-      }
-
-
-  body{
-      background-color: rgb(201, 140, 140);
     }
 
 
-  ul {
-    padding-left: 50px;
-    font-size: larger;
-    font-family: 'caveat';
-    text-align: left;
-    color:whitesmoke;
-  }
+#all_products img {
+        border: 5px solid var(--secondary--color)
+        
+      }
+      
+
+body{
+      background-color: rgb(201, 140, 140);
+      
+    }
 
 
-footer {
+#theEnd {
+      clear: both;
+      margin-top: 5%;
+      margin-left: 3%;
+      font-size: 150%;
+      font-style: oblique;
+      text-align: center;
+      color:whitesmoke;
+      border: 5px solid var(--secondary--color);
+      margin-left: 30%;
+      margin-right: 30%;
+      padding-top: 30px;
+      padding-bottom: 30px;
+
+      
+    }
+
+
+  
+/* footer {
     clear: both;
     background-color:var(--secondary--color);
     color: whitesmoke;
@@ -65,4 +100,4 @@ footer {
     margin-top: 50px;
     margin-bottom:-100px;
   }
-  
+   */
