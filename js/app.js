@@ -1,6 +1,6 @@
 'use strict';
 
-const productImages = [
+var productImages = [
   'bag.jpg',
   'banana.jpg',
   'bathroom.jpg',
@@ -24,17 +24,17 @@ const productImages = [
 ];
 
 
-const leftProductImg = document.querySelector('#left_product_img');
-const centerProductImg = document.querySelector('#center_product_img');
-const rightProductImg = document.querySelector('#right_product_img');
-const groupProductImages = document.getElementById('all_products');
-let products = [];//an array to store all products object
-let totalClicks = 0;
+var leftProductImg = document.querySelector('#left_product_img');
+var centerProductImg = document.querySelector('#center_product_img');
+var rightProductImg = document.querySelector('#right_product_img');
+var groupProductImages = document.getElementById('all_products');
+var products = [];//an array to store all products object
+console.log(products);
+var totalClicks = 0;
+var arrForDuplicateImg = [];
 
-/////////////////////////////////////////////////////////////////////////////
 
-//constructor function
-function Product(name){
+function Product(name) {
   this.name = name.split('.')[0];
   this.urlImage = `images/${name}`;
   this.clicksNumber = 0;
@@ -42,88 +42,138 @@ function Product(name){
   products.push(this);//this its refer to the object that im created
 }
 
+for (var i = 0; i < productImages.length; i++) {
+  // console.log(productImages[i]);
+  new Product(productImages[i]);//we pass the name of the product from the array
+  // setItem();
+}
+//var orders = document.getElementById('orders');
+/////////////////////////////////////////////////////////////////////////////
+
+//constructor function to generate dynamic product objects
+
 //////////////////////////////////////////////////////////////////////////////
 
-let leftImageRandom ;
-let centerImageRandom ;
-let rightImageRandom ;
+var leftImageRandom, centerImageRandom, rightImageRandom;
+function pickRandomImages() {
+  leftImageRandom = products[randomNumber(0, products.length - 1)];
+  centerImageRandom = products[randomNumber(0, products.length - 1)];
+  rightImageRandom = products[randomNumber(0, products.length - 1)];
+  leftImageRandom.viewsNumber = 1;
+  rightImageRandom.viewsNumber = 1;
+  centerImageRandom.viewsNumber = 1;
 
-function pickRandomImages(){
-  leftImageRandom = products[randomNumber(0 , products.length-1 )];
-  centerImageRandom = products[randomNumber(0 , products.length-1 )];
-  rightImageRandom = products[randomNumber(0 , products.length-1 )];
+  leftProductImg.setAttribute('src', leftImageRandom.urlImage);
+  leftProductImg.setAttribute('alt', leftImageRandom.name);
+  centerProductImg.setAttribute('src', centerImageRandom.urlImage);
+  centerProductImg.setAttribute('src', centerImageRandom.urlImage);
+  rightProductImg.setAttribute('src', rightImageRandom.urlImage);
+  rightProductImg.setAttribute('alt', rightImageRandom.name);
 
 
-  leftProductImg.setAttribute('src' , leftImageRandom.urlImage);
-  leftProductImg.setAttribute('alt' , leftImageRandom.name);
-  centerProductImg.setAttribute('src' , centerImageRandom.urlImage);
-  centerProductImg.setAttribute('src' , centerImageRandom.urlImage);
-  rightProductImg.setAttribute('src' , rightImageRandom.urlImage);
-  rightProductImg.setAttribute('alt' ,rightImageRandom.name);
+  while (leftImageRandom === centerImageRandom || rightImageRandom === centerImageRandom ||
+    leftImageRandom === rightImageRandom || arrForDuplicateImg.includes(leftImageRandom) ||
+    arrForDuplicateImg.includes(rightImageRandom) || arrForDuplicateImg.includes(centerImageRandom)) {
 
+    leftImageRandom = products[randomNumber(0, products.length - 1)];
+    centerImageRandom = products[randomNumber(0, products.length - 1)];
+    rightImageRandom = products[randomNumber(0, products.length - 1)];
 
-  while(leftImageRandom===centerImageRandom || rightImageRandom === centerImageRandom || leftImageRandom === rightImageRandom){
-    leftImageRandom = products[randomNumber(0 , products.length-1 )];
-    centerImageRandom = products[randomNumber(0 , products.length-1 )];
-    rightImageRandom = products[randomNumber(0 , products.length-1 )];
-
-    leftProductImg.setAttribute('src' , leftImageRandom.urlImage);
-    leftProductImg.setAttribute('alt' , leftImageRandom.name);
-    centerProductImg.setAttribute('src' , centerImageRandom.urlImage);
-    centerProductImg.setAttribute('src' , centerImageRandom.urlImage);
-    rightProductImg.setAttribute('src' , rightImageRandom.urlImage);
-    rightProductImg.setAttribute('alt' ,rightImageRandom.name);
+    leftProductImg.setAttribute('src', leftImageRandom.urlImage);
+    leftProductImg.setAttribute('alt', leftImageRandom.name);
+    centerProductImg.setAttribute('src', centerImageRandom.urlImage);
+    centerProductImg.setAttribute('src', centerImageRandom.urlImage);
+    rightProductImg.setAttribute('src', rightImageRandom.urlImage);
+    rightProductImg.setAttribute('alt', rightImageRandom.name);
 
   }
+
+  arrForDuplicateImg = [];
+  arrForDuplicateImg.push(rightImageRandom);
+  arrForDuplicateImg.push(centerImageRandom);
+  arrForDuplicateImg.push(leftImageRandom);
+
 }
 
 /////////////////////////////////////////////////////////////////////////
 
-for(let i = 0; i< productImages.length ; i++){
-// console.log(productImages[i]);
-  new Product(productImages[i]);
+pickRandomImages(); //first time to load
+
+// Variables to store the product already on the page
+// the allImages array is a property of the ProductPicture constructor
+///////////////////////////////////////////////////////////////////////////
+
+function setItem() {
+  var productImgArr = JSON.stringify(products); //products array has my object , here I will converte the objs to string Json
+  localStorage.setItem('productsViewAndClicks', productImgArr);
 }
-pickRandomImages();
-
-
 
 //////////////////////////////////////////////////////////////////////////
 
-groupProductImages.addEventListener('click' , clickImage);
+function getItem() {
 
-function clickImage(event){
+  var productsViewAndClicks = localStorage.getItem('productsViewAndClicks');
+  
+  if(productsViewAndClicks!==null){
+    console.log(productsViewAndClicks);
+    products = JSON.parse(productsViewAndClicks);
+    render();
+  }
+}
 
-  if(totalClicks < 25 ){
+//////////////////////////////////////////////////////////////////////////////
 
-    if( event.target.id === 'left_product_img'){
+
+
+groupProductImages.addEventListener('click', clickImage);
+
+
+function clickImage(e) {
+
+  if (totalClicks < 25) {
+
+    if (e.target.id === 'left_product_img') {
       leftImageRandom.clicksNumber++;
-    } if (event.target.id === 'center_product_img' ){
+    } if (e.target.id === 'center_product_img') {
       centerImageRandom.clicksNumber++;
-    } if (event.target.id === 'right_product_img'){
+    } if (e.target.id === 'right_product_img') {
       rightImageRandom.clicksNumber++;
     }
+
     totalClicks++;
     leftImageRandom.viewsNumber++;
     rightImageRandom.viewsNumber++;
     centerImageRandom.viewsNumber++;
-
     pickRandomImages();
-  } if (totalClicks === 25){
-    groupProductImages.removeEventListener('click' , clickImage);
+
+  } if (totalClicks === 25) {
+    groupProductImages.removeEventListener('click', clickImage);
+    //getItem();
     render();
+    // render();
+    renderChart();
+    setItem();
     //console.log('finished');
   }
+
+
+
 }
 
-
+//getItem();
 /////////////////////////////////////////////////////////////////////////
 
 function render() {
-  const ulE1 = document.getElementById('theEnd');
-  for (let i =0; i<products.length ; i++) {
-    const liE1 = document.createElement('li');
+  var ulE1 = document.getElementById('theEnd');
+  
+  ulE1.textContent = '';
+
+  for (var i = 0; i < products.length; i++) {
+    var liE1 = document.createElement('li');
     liE1.textContent = `${products[i].name} had ${products[i].clicksNumber} votes and was shown ${products[i].viewsNumber} times`;
     ulE1.appendChild(liE1);
+    // render();
+    // getItem();
   }
 }
 
@@ -133,3 +183,58 @@ function render() {
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+///////////////////////////////////////////////////////////////////////
+
+
+
+function renderChart() {
+  var myProductNames = [];
+  var myProductClicks = [];
+  var myviews = [];
+  for (var i = 0; i < products.length; i++) {
+    var productNames = products[i].name;
+    myProductNames.push(productNames);
+    var productClicks = products[i].clicksNumber;
+    myProductClicks.push(productClicks);
+    var productViews = products[i].viewsNumber;
+    myviews.push(productViews);
+  }
+  var ctx = document.getElementById('myProducts').getContext('2d');
+  // eslint-disable-next-line no-unused-vars
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels:
+              myProductNames,
+      datasets: [{
+        label: '# of Votes',
+        data: myProductClicks,
+        backgroundColor: 'DarkCyan',
+        borderColor: 'white',
+        borderWidth: 1,
+
+      },
+      {
+
+        label: '# of views',
+        data: myviews,
+        backgroundColor: 'rgb(70, 26, 26)',
+        borderColor:'white',
+        borderWidth: 1,
+
+
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+getItem();
